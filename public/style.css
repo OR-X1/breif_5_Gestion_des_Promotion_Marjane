@@ -1,0 +1,12 @@
+.avatar-ctn{
+    text-align: center;
+    background-color: orange;
+}
+.avatar{
+    width: 35%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+li{
+    list-style: none;
+    margin-right: 3px;
+}
