@@ -1,15 +1,11 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
-const dotenv = require('dotenv')
 const {
     promisify
 } = require('util')
-dotenv.config({
-    path: './.env'
-})
 const {
     db
-} = require('../db/index')
+} = require('../../db/index')
 exports.register = (req, res) => {
     console.log(req.body)
     const {
@@ -19,7 +15,7 @@ exports.register = (req, res) => {
         password,
         passwordconfirm
     } = req.body
-    db.query('SELECT email from admin_genirale where email = ?', [email], async (err, result) => {
+    db.query('SELECT email from admin_center where email = ?', [email], async (err, result) => {
         if (err) {
             console.log(err)
         }

@@ -1,15 +1,11 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
-const dotenv = require('dotenv')
 const {
     promisify
 } = require('util')
-dotenv.config({
-    path: './.env'
-})
 const {
     db
-} = require('../db/index')
+} = require('../../db/index')
 exports.register = (req, res) => {
     console.log(req.body)
     const {

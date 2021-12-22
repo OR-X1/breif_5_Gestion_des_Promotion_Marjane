@@ -1,53 +1,80 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
-const dotenv = require('dotenv')
 const {
     promisify
 } = require('util')
-dotenv.config({
-    path: './.env'
-})
 const {
     db
-} = require('../db/index')
-exports.register = (req, res) => {
-    console.log(req.body)
+} = require('../../db/index')
+exports.creation = (req, res) => {
     const {
         name,
         prenom,
         email,
         password,
-        passwordconfirm
+        passwordconfirm,
+        centreid
     } = req.body
-    db.query('SELECT email from admin_genirale where email = ?', [email], async (err, result) => {
+    db.query('SELECT email from admin_center where email = ?', [email], async (err, result) => {
         if (err) {
             console.log(err)
         }
 
         if (result.length > 0) {
-            return res.render('register', {
+            return res.render('/admin_general/creation', {
                 message: 'that email is already in use'
             })
         } else if (password !== passwordconfirm) {
-            return res.render('register', {
+            return res.render('/admin_general/creation', {
                 message: 'password do not match'
             })
         }
         let hashedpassword = await bcrypt.hash(password, 8)
         console.log(hashedpassword)
-        db.query('insert into admin_genirale set ?', {
+        db.query('insert into admin_center set ?', {
             nom: name,
             prenom: prenom,
             email: email,
-            password: hashedpassword
+            password: hashedpassword,
+            center_id: centreid
         }, (err, result) => {
             if (err) {
                 console.log(err)
             } else {
                 console.log(result)
-                return res.render('register', {
-                    message: 'User registered'
+                return res.render('/admin_general/creation', {
+                    message: 'Admin center Created'
                 })
+            }
+        })
+    })
+}
+exports.creationcentre = (req, res) => {
+    const {
+        name,
+    } = req.body
+    db.query('SELECT name from center where name = ?', [name], async (err, result) => {
+        if (err) {
+            console.log(err)
+        }
+
+        if (result.length > 0) {
+            return res.render('admin_general/creationcentre', {
+                message: 'that name is already in use'
+            })
+        }
+        db.query('insert into center set ?', {
+            name: name,
+        }, (err, result) => {
+            if (err) {
+                console.log(err)
+            } else {
+                db.query('select * from center', (err, result) => {
+                    return res.render('admin_general/creation', {
+                        req: result
+                    })
+                })
+
             }
         })
     })
@@ -63,7 +90,7 @@ exports.login = async (req, res) => {
                 message: 'Please add an email and password'
             })
         }
-        db.query('select * from users where email = ?', [email], async (err, result) => {
+        db.query('select * from admin_genirale where email = ?', [email], async (err, result) => {
             if (!result || !(await bcrypt.compare(password, result[0].password))) {
                 return res.status(401).render('login', {
                     message: 'email or password is incorrect'
@@ -83,7 +110,7 @@ exports.login = async (req, res) => {
                     httpOnly: true
                 }
                 res.cookie('jwt', token, cookieOptions)
-                res.status(200).redirect("/")
+                res.status(200).redirect("/generaladmin/profile")
             }
         })
     } catch (error) {
@@ -96,7 +123,7 @@ exports.isLoginIn = async (req, res, next) => {
         try {
             const decoded = await promisify(jwt.verify)(req.cookies.jwt, process.env.JWT_SECRET)
             console.log(decoded)
-            db.query('select * from users where id = ?', [decoded.id], (error, result) => {
+            db.query('select * from admin_genirale where id = ?', [decoded.id], (error, result) => {
                 console.log(result)
                 if (!result) {
                     return next()
@@ -119,5 +146,5 @@ exports.logout = async (req, res) => {
         expires: new Date(Date.now() + 2 * 1000),
         httpOnly: true
     })
-    res.status(200).redirect('/')
+    res.status(200).redirect('/generaladmin/login')
 }

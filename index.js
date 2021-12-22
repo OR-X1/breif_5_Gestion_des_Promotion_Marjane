@@ -21,8 +21,12 @@ app.use(cookieParser())
 app.set('view engine', 'hbs');
 
 //define routes
-app.use('/', require('./routes/pages'));
-app.use('/auth', require('./routes/auth'));
+app.use('/generaladmin', require('./routes/admin_genaral/generaladmin'));
+// app.use('/centreadmin', require('./routes/centreadmin'));
+// app.use('/rayon', require('./routes/rayon'));
+app.use('/auth/generaladmin', require('./routes/admin_genaral/generaladmin_auth'));
+// app.use('/auth', require('./routes/auth'));
+// app.use('/auth', require('./routes/auth'));
 app.listen(3030, () => {
     console.log("Up Server")
 })

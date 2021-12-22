@@ -20,26 +20,13 @@
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="#">Home</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Link
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled">Link</a>
-        </li>
       </ul>
       <form class="d-flex">
-        <button class="btn btn-outline-success" type="submit">Registre</button>
+   <li><a href="/generaladmin">Home</a></li>
+            <li><a href="/generaladmin/profile">Profile</a></li>
+            <li><a href="/generaladmin/creation">Create centre admin</a></li>
+            <li><a href="/generaladmin/creationcentre">create centre</a></li>
+            <li><a href="/auth/generaladmin/logout">Logout</a></li>
       </form>
     </div>
   </div>
@@ -48,7 +35,7 @@
   {{#if message}}
 <div class="alert alert-warning" role="alert">{{message}}</div>
 {{/if}}
-<form action="/auth/register" method="POST">
+<form action="/auth/generaladmin/creation" method="POST">
   <div class="mb-3">
     <label for="name" class="form-label">Name</label>
     <input type="text" name="name" class="form-control" id="name" aria-describedby="emailHelp">
@@ -70,6 +57,16 @@
     <label for="passwordconfirm" class="form-label">Password Confirm</label>
     <input type="password" name="passwordconfirm" class="form-control" id="passwordconfirm">
   </div>
+  <div class="mb-3">
+    <select class="form-select" name="centreid" aria-label="Default select example">
+  <option selected>Open this select menu</option>
+  {{#each req}}
+  <option value="{{id}}">{{name}}</option>
+{{/each}}
+  
+</select>
+  </div>
+
   <div class="mb-3 form-check">
     <input type="checkbox" class="form-check-input" id="exampleCheck1">
     <label class="form-check-label" for="exampleCheck1">Check me out</label>
