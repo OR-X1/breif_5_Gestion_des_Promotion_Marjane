@@ -74,7 +74,6 @@ exports.creationcentre = (req, res) => {
                         req: result
                     })
                 })
-
             }
         })
     })
