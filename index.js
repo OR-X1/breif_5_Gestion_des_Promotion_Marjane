@@ -21,7 +21,7 @@ app.use(cookieParser())
 app.set('view engine', 'hbs');
 
 //define routes
-app.use('/generaladmin', require('./routes/admin_genaral/generaladmin'));
+// app.use('/generaladmin', require('./routes/admin_genaral/generaladmin'));
 // app.use('/centreadmin', require('./routes/centreadmin'));
 // app.use('/rayon', require('./routes/rayon'));
 app.use('/auth/generaladmin', require('./routes/admin_genaral/generaladmin_auth'));
