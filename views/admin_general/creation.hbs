@@ -60,10 +60,10 @@
   <div class="mb-3">
     <select class="form-select" name="centreid" aria-label="Default select example">
   <option selected>Open this select menu</option>
-  {{#each req}}
+  {{#each centre}}
   <option value="{{id}}">{{name}}</option>
 {{/each}}
-  
+  <a href="/auth/{{id}}"></a>
 </select>
   </div>
 
