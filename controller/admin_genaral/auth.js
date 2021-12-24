@@ -3,6 +3,22 @@ const bcrypt = require('bcryptjs')
 const {
     db
 } = require('../../db/index')
+
+
+var nodemailer = require('nodemailer');
+
+
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'exemple@gmail.com',
+      pass: 'your password'
+    }
+  });
+
+ 
+
+  
 ////////////////////
 exports.login = async (req, res) => {
     try {
@@ -108,6 +124,23 @@ exports.creation = (req, res) => {
             }
         })
     })
+
+
+    var mailOptions = {
+        from: 'exemple@gmail.com',
+        to: email,
+        subject: 'your login ',
+        text: ` email : ${email}
+                password : ${password}
+        `,
+      };
+
+      transporter.sendMail(mailOptions, (err, data) => {
+        if (err) {
+            return log('Error occurs');
+        }
+      });
+
 }
 exports.creationcentre = (req, res) => {
     const {
