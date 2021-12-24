@@ -109,6 +109,36 @@ exports.creation = (req, res) => {
         })
     })
 }
+exports.creationpromotion = (req, res) => {
+    const {
+        porcentage,
+        produit_id
+    } = req.body
+    db.query('insert into promotion set ?', {
+        porcentage: porcentage,
+        point_fidelite: porcentage * 10
+    }, (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            console.log(result.insertId)
+            db.query('insert into p_p set ?', {
+                produit_id: produit_id,
+                promotion_id: result.insertId
+            }, (err, result) => {
+                if (err) {
+                    console.log(err)
+                } else {
+                    console.log(result)
+                    return res.status(200).send({
+                        msg: "Add promotion with success"
+                    })
+                }
+            })
+        }
+    })
+
+}
 exports.update = (req, res) => {
 
     const {
