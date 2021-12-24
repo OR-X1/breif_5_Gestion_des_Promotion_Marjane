@@ -22,7 +22,7 @@ exports.login = async (req, res) => {
                     message: 'email or password is incorrect'
                 })
             } else {
-                const id = result[0].id;
+                const id = "admin_genirale";
                 const token = jwt.sign({
                     id
                 }, process.env.JWT_SECRET, {
@@ -52,8 +52,14 @@ exports.isLoginIn = async (req, res, next) => {
             token,
             process.env.JWT_SECRET
         );
-        req.userData = decoded;
-        return next()
+        if (decoded.id == "admin_genirale") {
+            return next()
+
+        } else {
+            return res.status(401).send({
+                msg: 'You dont have a permission'
+            });
+        }
     } catch (err) {
         return res.status(401).send({
             msg: 'Your session is not valid!'
