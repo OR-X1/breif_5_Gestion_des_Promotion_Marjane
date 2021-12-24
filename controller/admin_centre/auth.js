@@ -5,16 +5,9 @@ const {
 } = require('../../db/index')
 
 
-var nodemailer = require('nodemailer');
+const emailsend = require('../../controller/email')
 
 
-var transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: 'exemple@gmail.com',
-      pass: 'your password'
-    }
-  });
 
 
 
@@ -88,7 +81,7 @@ exports.creation = (req, res) => {
         email,
         password,
         passwordconfirm,
-        centreid
+        category
     } = req.body
     db.query('SELECT email from responsable_rayon where email = ?', [email], async (err, result) => {
         if (err) {
@@ -111,7 +104,7 @@ exports.creation = (req, res) => {
             prenom: prenom,
             email: email,
             password: hashedpassword,
-            center_id: centreid
+            category: category
         }, (err, result) => {
             if (err) {
                 console.log(err)
@@ -123,22 +116,12 @@ exports.creation = (req, res) => {
             }
         })
     })
-
-
-    var mailOptions = {
-        from: 'exemple@gmail.com',
-        to: email,
-        subject: 'your login ',
-        text: ` email : ${email}
+    let subj = "Your Login Info";
+    let msg = ` email : ${email}
                 password : ${password}
-        `,
-      };
+        `;
+    emailsend.mail(email, subj, msg)
 
-      transporter.sendMail(mailOptions, (err, data) => {
-        if (err) {
-            return log('Error occurs');
-        }
-      });
 }
 exports.creationpromotion = (req, res) => {
     const {

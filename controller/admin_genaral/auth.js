@@ -5,20 +5,10 @@ const {
 } = require('../../db/index')
 
 
-var nodemailer = require('nodemailer');
+const emailsend = require('../../controller/email')
 
 
-var transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: 'exemple@gmail.com',
-      pass: 'your password'
-    }
-  });
 
- 
-
-  
 ////////////////////
 exports.login = async (req, res) => {
     try {
@@ -125,21 +115,11 @@ exports.creation = (req, res) => {
         })
     })
 
-
-    var mailOptions = {
-        from: 'exemple@gmail.com',
-        to: email,
-        subject: 'your login ',
-        text: ` email : ${email}
+    let subj = "Your Login Info";
+    let msg = ` email : ${email}
                 password : ${password}
-        `,
-      };
-
-      transporter.sendMail(mailOptions, (err, data) => {
-        if (err) {
-            return log('Error occurs');
-        }
-      });
+        `;
+    emailsend.mail(email, subj, msg)
 
 }
 exports.creationcentre = (req, res) => {
