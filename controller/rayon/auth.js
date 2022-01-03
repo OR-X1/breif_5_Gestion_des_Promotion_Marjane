@@ -3,7 +3,6 @@ const bcrypt = require('bcryptjs')
 const {
     db
 } = require('../../db/index')
-const async = require('hbs/lib/async')
 ////////////////////
 exports.login = async (req, res) => {
     try {
@@ -77,17 +76,17 @@ exports.update = (req, res) => {
     const {
         id,
     } = req.params
-    db.query('SELECT produit.prix, promotion.porcentage FROM p_p, produit, promotion where p_p.id = produit.id and p_p.id = promotion.id and p_p.id = ?;', [id],  (err, result) => {
+    db.query('SELECT produit.prix, promotion.porcentage FROM p_p, produit, promotion where p_p.produit_id = produit.id and p_p.promotion_id = promotion.id and p_p.id = ?;', [id], (err, result) => {
         if (err) {
             return res.status(401).send({
                 msg: err
             })
         } else {
             //  res.status(200).send({
-                const data_promotion =  result[0].prix - (result[0].porcentage*result[0].prix/100)
+            const data_promotion = result[0].prix - (result[0].porcentage * result[0].prix / 100)
             // })
 
-             db.query('update p_p set status = ?,commentaire= ? where id=?', [status, commentaire, id], (err, result) => {
+            db.query('update p_p set status = ?,commentaire= ? where id=?', [status, commentaire, id], (err, result) => {
                 if (err) {
                     return res.status(401).json({
                         msg: err
@@ -109,7 +108,35 @@ exports.update = (req, res) => {
             })
         }
     })
-    
+
+}
+exports.getpromo = (req, res) => {
+
+
+    const date = new Date();
+    const currentHour = date.getHours();
+    if ((8 < currentHour) && (currentHour < 12)) {
+
+        db.query('SELECT produit.name, produit.prix, produit.quantite, promotion.porcentage, p_p.status FROM p_p, produit, promotion where p_p.produit_id = produit.id and p_p.promotion_id = promotion.id and produit.category = "electronique"', (err, result) => {
+            if (err) {
+                console.log(err);
+                return;
+            } else {
+                return res.json({
+                    succes: true,
+                    data: result
+                })
+            }
+        })
+    } else {
+
+        return res.json({
+            succes: false,
+            data: "there's no promotions right now, get back later"
+        })
+    }
+
+
 }
 
 exports.logout = async (req, res) => {
