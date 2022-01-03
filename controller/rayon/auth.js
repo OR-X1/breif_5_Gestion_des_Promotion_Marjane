@@ -113,8 +113,8 @@ exports.update = (req, res) => {
 exports.getpromo = (req, res) => {
 
 
-    const d = new Date();
-    const currentHour = d.getHours();
+    const date = new Date();
+    const currentHour = date.getHours();
     if ((8 < currentHour) && (currentHour < 12)) {
 
         db.query('SELECT produit.name, produit.prix, produit.quantite, promotion.porcentage, p_p.status FROM p_p, produit, promotion where p_p.produit_id = produit.id and p_p.promotion_id = promotion.id and produit.category = "electronique"', (err, result) => {

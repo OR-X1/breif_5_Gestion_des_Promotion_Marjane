@@ -175,6 +175,48 @@ exports.update = (req, res) => {
         }
     })
 }
+exports.getvalidepromo = (req, res) => {
+    db.query('SELECT produit.name, produit.prix, produit.quantite, promotion.porcentage, p_p.status FROM p_p, produit, promotion where p_p.produit_id = produit.id and p_p.promotion_id = promotion.id and p_p.status="1"', (err, result) => {
+        if (err) {
+            console.log(err);
+            return;
+        } else {
+            return res.json({
+                succes: true,
+                msg: "valide promo",
+                data: result
+            })
+        }
+    })
+}
+exports.getinvalidepromo = (req, res) => {
+    db.query('SELECT produit.name, produit.prix, produit.quantite, promotion.porcentage, p_p.status FROM p_p, produit, promotion where p_p.produit_id = produit.id and p_p.promotion_id = promotion.id and p_p.status="0"', (err, result) => {
+        if (err) {
+            console.log(err);
+            return;
+        } else {
+            return res.json({
+                succes: true,
+                msg: "invalide promo",
+                data: result
+            })
+        }
+    })
+}
+exports.promopasencore = (req, res) => {
+    db.query('SELECT produit.name, produit.prix, produit.quantite, promotion.porcentage, p_p.status FROM p_p, produit, promotion where p_p.produit_id = produit.id and p_p.promotion_id = promotion.id and p_p.status IS Null', (err, result) => {
+        if (err) {
+            console.log(err);
+            return;
+        } else {
+            return res.json({
+                succes: true,
+                msg: "invalide promo",
+                data: result
+            })
+        }
+    })
+}
 exports.delete = (req, res) => {
     const {
         id,
