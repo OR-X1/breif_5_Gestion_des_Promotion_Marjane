@@ -5,7 +5,8 @@ const {
 } = require('../../db/index')
 
 
-const emailsend = require('../../controller/email')
+const emailsend = require('../email')
+const logs = require('../log')
 
 
 
@@ -144,6 +145,7 @@ exports.creationpromotion = (req, res) => {
                     console.log(err)
                 } else {
                     console.log(result)
+
                     return res.status(200).send({
                         msg: "Add promotion with success"
                     })
@@ -176,11 +178,15 @@ exports.update = (req, res) => {
     })
 }
 exports.getvalidepromo = (req, res) => {
-    db.query('SELECT produit.name, produit.prix, produit.quantite, promotion.porcentage, p_p.status FROM p_p, produit, promotion where p_p.produit_id = produit.id and p_p.promotion_id = promotion.id and p_p.status="1"', (err, result) => {
+    db.query('SELECT produit.name, produit.prix, produit.quantite, promotion.porcentage, p_p.status ,p_p.commentaire FROM p_p, produit, promotion where p_p.produit_id = produit.id and p_p.promotion_id = promotion.id and p_p.status="1"', (err, result) => {
         if (err) {
+            let msg = "admincentre try to get validpromo"
+            logs.insertlog(msg);
             console.log(err);
             return;
         } else {
+            let msg = "admincentre get validpromo"
+            logs.insertlog(msg);
             return res.json({
                 succes: true,
                 msg: "valide promo",
@@ -190,11 +196,15 @@ exports.getvalidepromo = (req, res) => {
     })
 }
 exports.getinvalidepromo = (req, res) => {
-    db.query('SELECT produit.name, produit.prix, produit.quantite, promotion.porcentage, p_p.status FROM p_p, produit, promotion where p_p.produit_id = produit.id and p_p.promotion_id = promotion.id and p_p.status="0"', (err, result) => {
+    db.query('SELECT produit.name, produit.prix, produit.quantite, promotion.porcentage, p_p.status ,p_p.commentaire FROM p_p, produit, promotion where p_p.produit_id = produit.id and p_p.promotion_id = promotion.id and p_p.status="0"', (err, result) => {
         if (err) {
+            let msg = "admincentre try to get invalidpromo"
+            logs.insertlog(msg);
             console.log(err);
             return;
         } else {
+            let msg = "admincentre get invalidpromo"
+            logs.insertlog(msg);
             return res.json({
                 succes: true,
                 msg: "invalide promo",
@@ -206,9 +216,13 @@ exports.getinvalidepromo = (req, res) => {
 exports.promopasencore = (req, res) => {
     db.query('SELECT produit.name, produit.prix, produit.quantite, promotion.porcentage, p_p.status FROM p_p, produit, promotion where p_p.produit_id = produit.id and p_p.promotion_id = promotion.id and p_p.status IS Null', (err, result) => {
         if (err) {
+            let msg = "admincentre try to get pas encore promo"
+            logs.insertlog(msg);
             console.log(err);
             return;
         } else {
+            let msg = "admincentre get pas encore promo"
+            logs.insertlog(msg);
             return res.json({
                 succes: true,
                 msg: "invalide promo",
