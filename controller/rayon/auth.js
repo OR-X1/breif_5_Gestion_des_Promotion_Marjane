@@ -89,18 +89,18 @@ exports.update = (req, res) => {
 
              db.query('update p_p set status = ?,commentaire= ? where id=?', [status, commentaire, id], (err, result) => {
                 if (err) {
-                    return res.status(401).send({
+                    return res.status(401).json({
                         msg: err
                     })
                 } else {
 
                     db.query('UPDATE `produit` SET `prix_promotion` = ? WHERE `produit`.`id` = ?;', [data_promotion, id], (err, result) => {
                         if (err) {
-                            return res.status(401).send({
+                            return res.status(401).json({
                                 msg: err
                             })
                         } else {
-                            return res.status(200).send({
+                            return res.status(200).json({
                                 msg: "status & comment is done"
                             })
                         }

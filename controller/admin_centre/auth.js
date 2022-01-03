@@ -9,8 +9,6 @@ const emailsend = require('../../controller/email')
 
 
 
-
-
 ////////////////////
 exports.login = async (req, res) => {
     try {
