@@ -18,14 +18,14 @@ exports.login = async (req, res) => {
         } = req.body
         console.log(req.body)
         if (!email || !password) {
-            return res.status(401).send({
+            return res.status(200).send({
                 msg: "Please add an email and password"
             })
         }
         db.query('select * from admin_genirale where email = ?', [email], async (err, result) => {
             if (!result || !(await bcrypt.compare(password, result[0].password))) {
-                return res.status(401).send({
-                    message: 'email or password is incorrect'
+                return res.status(200).send({
+                    err: 'email or password is incorrect',
                 })
             } else {
                 const id = "admin_genirale";
@@ -34,14 +34,9 @@ exports.login = async (req, res) => {
                 }, process.env.JWT_SECRET, {
                     expiresIn: process.env.JWT_EXPIRE_IN
                 })
-                // const cookieOptions = {
-                //     expires: new Date(
-                //         Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
-                //     ),
-                //     httpOnly: true
-                // }
                 return res.status(200).send({
                     msg: "lOGIN SUCCES",
+                    data: result,
                     token: token
                 })
             }
@@ -122,6 +117,22 @@ exports.creation = (req, res) => {
     emailsend.mail(email, subj, msg)
 
 }
+
+exports.getallcenter = (req, res) => {
+
+    db.query('SELECT * from center',  (err, result) => {
+        if (err) {
+            console.log(err)
+        }
+        if (result.length > 0) {
+            return res.status(200).json({
+                msg: "fetch all data",
+                result
+            })
+        }
+    })
+}
+
 exports.creationcentre = (req, res) => {
     const {
         name,
@@ -150,6 +161,47 @@ exports.creationcentre = (req, res) => {
         })
     })
 }
+
+exports.deletecentre = (req, res) => {
+        const {
+            id,
+        } = req.params
+        db.query('delete from center where id=?', id, (err, result) => {
+            if (err) {
+                return res.status(401).send({
+                    msg: err
+                })
+            } else {
+                return res.status(200).send({
+                    msg: "center delete"
+                })
+            }
+        })
+    
+    }
+
+exports.getall = (req, res) => {
+
+    db.query('SELECT admin_center.*, center.name FROM `center`, `admin_center` WHERE admin_center.center_id = center.id',  (err, result) => {
+        if (err) {
+            console.log(err)
+        }
+        var getalladmincenter = result;
+        db.query('SELECT * from center',  (err, result) => {
+            if (err) {
+                console.log(err)
+            }
+            if (result.length > 0) {
+                return res.status(200).json({
+                    msg: "fetch all data",
+                    getalladmincenter,
+                    result
+                })
+            }
+        })
+    })
+}
+
 exports.update = (req, res) => {
 
     const {

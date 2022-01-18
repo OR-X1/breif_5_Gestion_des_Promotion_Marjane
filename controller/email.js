@@ -8,8 +8,8 @@ dotenv.config({
 var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD
+        user: "contact.quizzy.com@gmail.com",
+        pass: "quizzy.contact.2021"
     }
 });
 
@@ -18,7 +18,7 @@ var transporter = nodemailer.createTransport({
 module.exports = email = {
     mail: (emailto, subj, mesg) => {
         var mailOptions = {
-            from: 'safiair@airsafi.com',
+            from: 'contact.quizzy.com@gmail.com',
             to: emailto,
             subject: subj,
             text: mesg

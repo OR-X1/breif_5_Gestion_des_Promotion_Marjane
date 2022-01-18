@@ -25,8 +25,8 @@ app.set('view engine', 'hbs');
 // app.use('/centreadmin', require('./routes/centreadmin'));
 // app.use('/rayon', require('./routes/rayon'));
 app.use('/auth/generaladmin', require('./routes/admin_genaral/generaladmin_auth'));
-app.use('/auth/responsablerayon', require('./routes/rayon/rayon_auth'));
 app.use('/auth/centreadmin', require('./routes/admin_centre/centreadmin_auth'));
+app.use('/auth/responsablerayon', require('./routes/rayon/rayon_auth'));
 // app.use('/auth', require('./routes/auth'));
 // app.use('/auth', require('./routes/auth'));
 app.listen(3030, () => {
