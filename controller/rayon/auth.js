@@ -11,13 +11,13 @@ exports.login = async (req, res) => {
             password
         } = req.body
         if (!email || !password) {
-            return res.status(401).send({
+            return res.status(200).send({
                 msg: "Please add an email and password"
             })
         }
         db.query('select * from responsable_rayon where email = ?', [email], async (err, result) => {
             if (!result || !(await bcrypt.compare(password, result[0].password))) {
-                return res.status(401).send({
+                return res.status(200).send({
                     message: 'email or password is incorrect'
                 })
             } else {
@@ -36,6 +36,7 @@ exports.login = async (req, res) => {
                 // }
                 return res.status(200).send({
                     msg: "lOGIN SUCCES",
+                    data: result,
                     token: token
                 })
             }
@@ -56,12 +57,12 @@ exports.isLoginIn = async (req, res, next) => {
             return next()
 
         } else {
-            return res.status(401).send({
+            return res.status(200).send({
                 msg: 'You dont have a permission'
             });
         }
     } catch (err) {
-        return res.status(401).send({
+        return res.status(200).send({
             msg: 'Your session is not valid!'
         });
     }
@@ -76,6 +77,8 @@ exports.update = (req, res) => {
     const {
         id,
     } = req.params
+    console.log(id);
+
     db.query('SELECT produit.prix, promotion.porcentage FROM p_p, produit, promotion where p_p.produit_id = produit.id and p_p.promotion_id = promotion.id and p_p.id = ?;', [id], (err, result) => {
         if (err) {
             return res.status(401).send({
@@ -112,12 +115,15 @@ exports.update = (req, res) => {
 }
 exports.getpromo = (req, res) => {
 
+    const {
+        category,
+    } = req.params
 
     const date = new Date();
     const currentHour = date.getHours();
-    if ((8 < currentHour) && (currentHour < 12)) {
+    // if ((8 < currentHour) && (currentHour < 12)) {
 
-        db.query('SELECT produit.name, produit.prix, produit.quantite, promotion.porcentage, p_p.status FROM p_p, produit, promotion where p_p.produit_id = produit.id and p_p.promotion_id = promotion.id and produit.category = "electronique"', (err, result) => {
+        db.query('SELECT  produit.name, produit.prix, produit.quantite, produit.category, promotion.porcentage, p_p.id, p_p.status FROM p_p, produit, promotion where p_p.produit_id = produit.id and p_p.promotion_id = promotion.id and produit.category = "'+category+'"', (err, result) => {
             if (err) {
                 console.log(err);
                 return;
@@ -128,13 +134,13 @@ exports.getpromo = (req, res) => {
                 })
             }
         })
-    } else {
+    // } else {
 
-        return res.json({
-            succes: false,
-            data: "there's no promotions right now, get back later"
-        })
-    }
+    //     return res.json({
+    //         succes: false,
+    //         data: "there's no promotions right now, get back later"
+    //     })
+    // }
 
 
 }

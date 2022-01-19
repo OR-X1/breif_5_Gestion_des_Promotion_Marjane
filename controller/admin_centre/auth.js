@@ -182,24 +182,24 @@ exports.delete = (req, res) => {
 
 }
 
+// exports.getallpromotion = (req, res) => {
+
+//     db.query('SELECT produit.name, produit.prix, produit.quantite, produit.category, promotion.porcentage, p_p.status ,p_p.commentaire FROM p_p, produit, promotion where p_p.produit_id = produit.id and p_p.promotion_id = promotion.id;',  (err, getallpromotion) => {
+//         if (err) {
+//             console.log(err)
+//         }
+//         if (getallpromotion.length > 0) {
+//             return res.status(200).json({
+//                 msg: "fetch all data",
+//                 getallpromotion
+//             })
+//         }
+//     })
+// }
+
 exports.getallpromotion = (req, res) => {
 
-    db.query('SELECT produit.name, produit.prix, produit.quantite, promotion.porcentage, p_p.status ,p_p.commentaire FROM p_p, produit, promotion where p_p.produit_id = produit.id and p_p.promotion_id = promotion.id;',  (err, getallpromotion) => {
-        if (err) {
-            console.log(err)
-        }
-        if (getallpromotion.length > 0) {
-            return res.status(200).json({
-                msg: "fetch all data",
-                getallpromotion
-            })
-        }
-    })
-}
-
-exports.getallpromotion = (req, res) => {
-
-    db.query('SELECT produit.name, produit.prix, produit.quantite, promotion.porcentage, p_p.status ,p_p.commentaire FROM p_p, produit, promotion where p_p.produit_id = produit.id and p_p.promotion_id = promotion.id',  (err, getallpromotion) => {
+    db.query('SELECT produit.name, produit.prix, produit.quantite, produit.category, promotion.porcentage, p_p.status ,p_p.commentaire FROM p_p, produit, promotion where p_p.produit_id = produit.id and p_p.promotion_id = promotion.id',  (err, getallpromotion) => {
         if (err) {
             console.log(err)
         }
